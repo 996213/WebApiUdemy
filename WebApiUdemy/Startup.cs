@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using WebApiUdemy.Controllers;
+using WebApiUdemy.Services;
 
 namespace WebApiUdemy
 {
@@ -20,6 +22,10 @@ namespace WebApiUdemy
     {
         public Startup(IConfiguration configuration)
         {
+            //var autoresController = new AuthorsController(new ApplicationDbContext(null),
+            //    new ServicioA(new Logger())
+            //    );
+            //autoresController.Get();
             Configuration = configuration;
         }
 
@@ -28,6 +34,14 @@ namespace WebApiUdemy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddTransient<IServicio, ServicioA>();
+            services.AddTransient<IServicio, ServicioA>();
+
+            services.AddTransient<ServicioTransient>();
+            services.AddScoped<ServicioScoped>();
+            services.AddSingleton<ServicioSingleton>();
+
+
 
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 

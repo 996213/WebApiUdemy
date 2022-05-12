@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApiUdemy.Entities;
+using WebApiUdemy.Services;
 
 namespace WebApiUdemy.Controllers
 {
@@ -13,15 +15,44 @@ namespace WebApiUdemy.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+        private readonly IServicio servicio;
+        private readonly ServicioTransient servicioTransient;
+        private readonly ServicioScoped servicioScoped;
+        private readonly ServicioSingleton servicioSingleton;
+        private readonly ILogger logger;
 
-        public AuthorsController(ApplicationDbContext context)
+        public AuthorsController(ApplicationDbContext context, IServicio servicio, ServicioTransient servicioTransient, ServicioScoped servicioScoped, ServicioSingleton servicioSingleton,
+            ILogger logger)
         {
             this.context = context;
+            this.servicio = servicio;
+            this.servicioTransient = servicioTransient;
+            this.servicioScoped = servicioScoped;
+            this.servicioSingleton = servicioSingleton;
+            this.logger = logger;
+        }
+
+        [HttpGet("GUID")]
+        public ActionResult Guid()
+        {
+            return Ok(new
+            {
+                ControllerTransient = servicioTransient.Guid,
+                ServicioTransient = servicio.ObtenerTransient(),
+                ControllerScoped = servicioScoped.Guid,
+                ServicioScoped = servicio.ObtenerScoped(),
+                ControllerSingleton = servicioSingleton.Guid,                               
+                ServicioSingleton = servicio.ObtenerSingleton()
+            });;
         }
 
         [HttpGet]
+        [HttpGet("listado")]
+        [HttpGet("/listado")]
         public async Task<ActionResult<List<Author>>> Get()
         {
+            logger.LogInformation("Obtener listado de autores");
+            servicio.RealizarTarea();
             return await context.Autores.Include(x=>x.Libros).ToListAsync();
         }
 
@@ -32,7 +63,7 @@ namespace WebApiUdemy.Controllers
         }
 
         [HttpGet("{id:int}/{param?}")]
-        [HttpGet("{id:int}/{param=2}")]
+        //[HttpGet("{id:int}/{param=2}")]
         public async Task<ActionResult<Author>> Get(int id, string nombre)
         {
             var autor = await context.Autores.FirstOrDefaultAsync(x => x.Id == id);
@@ -44,7 +75,7 @@ namespace WebApiUdemy.Controllers
 
 
         [HttpGet("{nombre}")]
-        public async Task<ActionResult<Author>> Get(string nombre)
+        public async Task<ActionResult<Author>> Get([FromRoute] string nombre)
         {
             var autor = await context.Autores.FirstOrDefaultAsync(x => x.Nombre.Contains(nombre));
             if (autor == null)
@@ -54,7 +85,7 @@ namespace WebApiUdemy.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Author autor)
+        public async Task<ActionResult> Post([FromBody] Author autor)
         {
             context.Add(autor);
             await context.SaveChangesAsync();
