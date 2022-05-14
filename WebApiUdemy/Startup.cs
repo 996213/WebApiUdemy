@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WebApiUdemy.Controllers;
+using WebApiUdemy.Filter;
 using WebApiUdemy.Middleware;
 using WebApiUdemy.Services;
 
@@ -44,10 +46,13 @@ namespace WebApiUdemy
             services.AddScoped<ServicioScoped>();
             services.AddSingleton<ServicioSingleton>();
 
+            services.AddResponseCaching();
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
             services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
+            services.AddTransient<MiFiltroDeAccion>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiUdemy", Version = "v1" });
@@ -60,7 +65,8 @@ namespace WebApiUdemy
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-            app.UseMiddleware<LoguearRespuestaHTTPMiddleware>();
+            //app.UseMiddleware<LoguearRespuestaHTTPMiddleware>();
+            app.useLoguearRespuestaHTTP();
 
             app.Map("/ruta1", app =>
             {
@@ -80,6 +86,8 @@ namespace WebApiUdemy
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseResponseCaching();
 
             app.UseAuthorization();
 

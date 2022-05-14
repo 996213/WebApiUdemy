@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,15 @@ using System.Threading.Tasks;
 
 namespace WebApiUdemy.Middleware
 {
+
+    public static class LoguearRespuestaHTTPMiddlewareExtensions
+    {
+        public static IApplicationBuilder useLoguearRespuestaHTTP(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<LoguearRespuestaHTTPMiddleware>();
+        }
+    }
+
     public class LoguearRespuestaHTTPMiddleware
     {
         private readonly RequestDelegate siguiente;

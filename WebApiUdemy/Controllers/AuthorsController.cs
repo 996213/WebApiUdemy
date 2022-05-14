@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -6,12 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApiUdemy.Entities;
+using WebApiUdemy.Filter;
 using WebApiUdemy.Services;
 
 namespace WebApiUdemy.Controllers
 {
     [ApiController]
     [Route("api/authors")]
+    //[Authorize]
     public class AuthorsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -32,6 +35,8 @@ namespace WebApiUdemy.Controllers
         }
 
         [HttpGet("GUID")]
+        //[ResponseCache(Duration =10)]
+        [ServiceFilter(typeof(MiFiltroDeAccion))]
         public ActionResult Guid()
         {
             return Ok(new
