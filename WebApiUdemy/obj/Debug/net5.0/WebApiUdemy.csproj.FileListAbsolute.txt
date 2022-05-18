@@ -22,7 +22,6 @@ C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Microsoft.Id
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Microsoft.OpenApi.dll
-C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Newtonsoft.Json.dll
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -58,3 +57,4 @@ C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\obj\Debug\net5.0\WebApiUdemy.
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\obj\Debug\net5.0\ref\WebApiUdemy.dll
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\obj\Debug\net5.0\WebApiUdemy.pdb
 C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\obj\Debug\net5.0\WebApiUdemy.genruntimeconfig.cache
+C:\Users\User\source\repos\WebApiUdemy\WebApiUdemy\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

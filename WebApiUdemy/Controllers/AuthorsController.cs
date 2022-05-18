@@ -22,16 +22,16 @@ namespace WebApiUdemy.Controllers
         private readonly ServicioTransient servicioTransient;
         private readonly ServicioScoped servicioScoped;
         private readonly ServicioSingleton servicioSingleton;
-        //private readonly ILogger logger;
+        private readonly ILogger logger;
 
-        public AuthorsController(ApplicationDbContext context, IServicio servicio, ServicioTransient servicioTransient, ServicioScoped servicioScoped, ServicioSingleton servicioSingleton)
+        public AuthorsController(ApplicationDbContext context, IServicio servicio, ServicioTransient servicioTransient, ServicioScoped servicioScoped, ServicioSingleton servicioSingleton, ILogger<AuthorsController> logger)
         {
             this.context = context;
             this.servicio = servicio;
             this.servicioTransient = servicioTransient;
             this.servicioScoped = servicioScoped;
             this.servicioSingleton = servicioSingleton;
-            //this.logger = logger;
+            this.logger = logger;
         }
 
         [HttpGet("GUID")]
@@ -53,10 +53,13 @@ namespace WebApiUdemy.Controllers
         [HttpGet]
         [HttpGet("listado")]
         [HttpGet("/listado")]
+        [ServiceFilter(typeof(MiFiltroDeAccion))]
         public async Task<ActionResult<List<Author>>> Get()
         {
-            //logger.LogInformation("Obtener listado de autores");
+            logger.LogInformation("Obtener listado de autores");
             servicio.RealizarTarea();
+            throw new NotImplementedException();
+
             return await context.Autores.Include(x=>x.Libros).ToListAsync();
         }
 

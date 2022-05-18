@@ -50,7 +50,11 @@ namespace WebApiUdemy
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
-            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            services.AddControllers(opciones =>
+                {
+                    opciones.Filters.Add(typeof(FiltroDeExcepcion));
+                }
+            ).AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
             services.AddTransient<MiFiltroDeAccion>();
             services.AddSwaggerGen(c =>
