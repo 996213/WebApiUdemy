@@ -14,5 +14,7 @@ namespace WebApiUdemy
         }
 
         public DbSet<Author> Autores { get; set; }
+        public DbSet<Book> Libros { get; set; }
+        public DbSet<Comments> Comentarios { get; set; }
     }
 }

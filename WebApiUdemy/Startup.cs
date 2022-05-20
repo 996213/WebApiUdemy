@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +12,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using WebApiUdemy.Controllers;
+using WebApiUdemy.Filter;
+using WebApiUdemy.Middleware;
+using WebApiUdemy.Services;
 
 namespace WebApiUdemy
 {
@@ -19,6 +27,10 @@ namespace WebApiUdemy
     {
         public Startup(IConfiguration configuration)
         {
+            //var autoresController = new AuthorsController(new ApplicationDbContext(null),
+            //    new ServicioA(new Logger())
+            //    );
+            //autoresController.Get();
             Configuration = configuration;
         }
 
@@ -27,8 +39,24 @@ namespace WebApiUdemy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddTransient<IServicio, ServicioA>();
+            services.AddTransient<IServicio, ServicioA>();
 
-            services.AddControllers();
+            services.AddTransient<ServicioTransient>();
+            services.AddScoped<ServicioScoped>();
+            services.AddSingleton<ServicioSingleton>();
+
+            services.AddResponseCaching();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+
+            services.AddControllers(opciones =>
+                {
+                    opciones.Filters.Add(typeof(FiltroDeExcepcion));
+                }
+            ).AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+
+            services.AddTransient<MiFiltroDeAccion>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiUdemy", Version = "v1" });
@@ -36,11 +64,25 @@ namespace WebApiUdemy
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
+
+            services.AddAutoMapper(typeof(Startup));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            //app.UseMiddleware<LoguearRespuestaHTTPMiddleware>();
+            app.useLoguearRespuestaHTTP();
+
+            app.Map("/ruta1", app =>
+            {
+                app.Run(async contexto =>
+                {
+                    await contexto.Response.WriteAsync("Estoy interceptando la tuberia");
+                });
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -51,6 +93,8 @@ namespace WebApiUdemy
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseResponseCaching();
 
             app.UseAuthorization();
 
