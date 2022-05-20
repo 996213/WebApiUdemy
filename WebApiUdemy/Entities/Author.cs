@@ -15,19 +15,19 @@ namespace WebApiUdemy.Entities
         [StringLength(maximumLength: 5, ErrorMessage = "El campo {0} no debe tener {1} caracteres")]
         [PrimeraLetraMayuscula]
         public string Nombre { get; set; }
-        [Range(minimum: 28, maximum:120)]
-        [NotMapped]
-        public int Edad { get; set; }
-        [CreditCard]
-        [NotMapped]
-        public string TarjetaCredito { get; set; }
-        [Url]
-        [NotMapped]
-        public string URLAutor { get; set; }
-        [NotMapped]
-        public int Menor { get; set; }
-        [NotMapped]
-        public int Mayor { get; set; }
+        //[Range(minimum: 28, maximum:120)]
+        //[NotMapped]
+        //public int Edad { get; set; }
+        //[CreditCard]
+        //[NotMapped]
+        //public string TarjetaCredito { get; set; }
+        //[Url]
+        //[NotMapped]
+        //public string URLAutor { get; set; }
+        //[NotMapped]
+        //public int Menor { get; set; }
+        //[NotMapped]
+        //public int Mayor { get; set; }
 
         public List<Book> Libros { get; set; }
 
@@ -41,11 +41,11 @@ namespace WebApiUdemy.Entities
                     yield return new ValidationResult("La primera letra debe ser mayuscula",
                         new String[] { nameof(Nombre) });
                 }
-                if (Menor > Mayor)
-                {
-                    yield return new ValidationResult("El campo menor no puede ser mayor que el campo Mayor",
-                        new String[] { nameof(Nombre) });
-                }
+                //if (Menor > Mayor)
+                //{
+                //    yield return new ValidationResult("El campo menor no puede ser mayor que el campo Mayor",
+                //        new String[] { nameof(Nombre) });
+                //}
                 
             }
             

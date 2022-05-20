@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiUdemy.DTO;
 using WebApiUdemy.Entities;
 
 namespace WebApiUdemy.Controllers
@@ -13,27 +15,31 @@ namespace WebApiUdemy.Controllers
     public class BooksController : ControllerBase
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper mapper;
 
-        public BooksController(ApplicationDbContext context)
+        public BooksController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Book>> Get(int id)
+        public async Task<ActionResult<LibroResponseDTO>> Get(int id)
         {
-            return await context.Libros.Include(x=>x.Autor).FirstOrDefaultAsync(x => x.Id == id);
+            var libro = await context.Libros.Include(x=>x.Autor).FirstOrDefaultAsync(x => x.Id == id);
+            return mapper.Map<LibroResponseDTO>(libro);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Book libro)
+        public async Task<ActionResult> Post(LibroCreacionDTO libroDTO)
         {
-            var existe = await context.Autores.AnyAsync(x => x.Id == libro.AutorId);
-            if (!existe)
-            {
-                return BadRequest($"No existe el autor con id: { libro.AutorId }");
-            }
-            context.Libros.Add(libro);
+            //var existe = await context.Autores.AnyAsync(x => x.Id == libro.AutorId);
+            //if (!existe)
+            //{
+            //    return BadRequest($"No existe el autor con id: { libro.AutorId }");
+            //}
+            var libro = mapper.Map<Book>(libroDTO);
+            context.Libros.Add(libro);          
             await context.SaveChangesAsync();
             return Ok();
         }
@@ -42,7 +48,10 @@ namespace WebApiUdemy.Controllers
         public async Task<ActionResult> Put(Book libro, int id)
         {
             var existeLibro = await context.Libros.AnyAsync(x => x.Id == id);
+            //context.Libros.Update(existeLibro);
+            context.Update(libro);
 
+            await context.SaveChangesAsync();
             return Ok();
         }
     }

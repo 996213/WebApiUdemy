@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiUdemy.DTO;
 using WebApiUdemy.Entities;
 using WebApiUdemy.Filter;
 using WebApiUdemy.Services;
@@ -23,8 +25,10 @@ namespace WebApiUdemy.Controllers
         private readonly ServicioScoped servicioScoped;
         private readonly ServicioSingleton servicioSingleton;
         private readonly ILogger logger;
+        private readonly IMapper mapper;
 
-        public AuthorsController(ApplicationDbContext context, IServicio servicio, ServicioTransient servicioTransient, ServicioScoped servicioScoped, ServicioSingleton servicioSingleton, ILogger<AuthorsController> logger)
+        public AuthorsController(ApplicationDbContext context, IServicio servicio, ServicioTransient servicioTransient, ServicioScoped servicioScoped, 
+            ServicioSingleton servicioSingleton, ILogger<AuthorsController> logger, IMapper mapper)
         {
             this.context = context;
             this.servicio = servicio;
@@ -32,6 +36,7 @@ namespace WebApiUdemy.Controllers
             this.servicioScoped = servicioScoped;
             this.servicioSingleton = servicioSingleton;
             this.logger = logger;
+            this.mapper = mapper;
         }
 
         [HttpGet("GUID")]
@@ -54,13 +59,13 @@ namespace WebApiUdemy.Controllers
         [HttpGet("listado")]
         [HttpGet("/listado")]
         [ServiceFilter(typeof(MiFiltroDeAccion))]
-        public async Task<ActionResult<List<Author>>> Get()
+        public async Task<ActionResult<List<AutorResponseDTO>>> Get()
         {
             logger.LogInformation("Obtener listado de autores");
-            servicio.RealizarTarea();
-            throw new NotImplementedException();
+            servicio.RealizarTarea();            
 
-            return await context.Autores.Include(x=>x.Libros).ToListAsync();
+            var autores = await context.Autores.Include(x=>x.Libros).ToListAsync();
+            return mapper.Map<List<AutorResponseDTO>>(autores);
         }
 
         [HttpGet("primero")]
@@ -82,19 +87,28 @@ namespace WebApiUdemy.Controllers
 
 
         [HttpGet("{nombre}")]
-        public async Task<ActionResult<Author>> Get([FromRoute] string nombre)
+        public async Task<ActionResult<List<Author>>> Get([FromRoute] string nombre)
         {
-            var autor = await context.Autores.FirstOrDefaultAsync(x => x.Nombre.Contains(nombre));
-            if (autor == null)
+            var autores = await context.Autores.Where(x => x.Nombre.Contains(nombre)).ToListAsync();
+            if (autores == null)
                 return NotFound();
             
-            return autor;
+
+            return autores;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Author autor)
+        public async Task<ActionResult> Post([FromBody] AutorCreacionDTO autorCreacionDTO)
         {
-            context.Add(autor);
+            var existeConElMismoNombre = await context.Autores.AnyAsync(x=>x.Nombre == autorCreacionDTO.Nombre);
+            if (existeConElMismoNombre)
+            {
+                return BadRequest($"Ya existe un autor con el nombre ${ autorCreacionDTO.Nombre }");
+            }
+
+            var autor = mapper.Map<Author>(autorCreacionDTO);
+
+                context.Add(autor);
             await context.SaveChangesAsync();
             return Ok();
         }
