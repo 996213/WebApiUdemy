@@ -59,12 +59,12 @@ namespace WebApiUdemy.Controllers
         [HttpGet("listado")]
         [HttpGet("/listado")]
         [ServiceFilter(typeof(MiFiltroDeAccion))]
-        public async Task<ActionResult<List<AutorResponseDTO>>> Get()
+        public async Task<List<AutorResponseDTO>> Get()
         {
             logger.LogInformation("Obtener listado de autores");
             servicio.RealizarTarea();            
 
-            var autores = await context.Autores.Include(x=>x.Libros).ToListAsync();
+            var autores = await context.Autores.ToListAsync();
             return mapper.Map<List<AutorResponseDTO>>(autores);
         }
 

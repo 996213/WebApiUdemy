@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace WebApiUdemy.DTO
 {
-    public class AutorResponseDTO
+    public class CommentRequestDTO
     {
-        public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string Contenido { get; set; }
     }
 }

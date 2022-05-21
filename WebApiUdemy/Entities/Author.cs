@@ -15,6 +15,7 @@ namespace WebApiUdemy.Entities
         [StringLength(maximumLength: 5, ErrorMessage = "El campo {0} no debe tener {1} caracteres")]
         [PrimeraLetraMayuscula]
         public string Nombre { get; set; }
+        public List<BookAuthor> AutorLibro { get; set; }
         //[Range(minimum: 28, maximum:120)]
         //[NotMapped]
         //public int Edad { get; set; }
@@ -29,7 +30,7 @@ namespace WebApiUdemy.Entities
         //[NotMapped]
         //public int Mayor { get; set; }
 
-        public List<Book> Libros { get; set; }
+        
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

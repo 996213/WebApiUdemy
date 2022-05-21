@@ -15,7 +15,8 @@ namespace WebApiUdemy.Entities
         [PrimeraLetraMayuscula]
         public string Titulo { get; set; }
         public int AutorId { get; set; }
-        public Author Autor { get; set; }
+        //public Author Autor { get; set; }
         public List<Comments> Comentarios { get; set; }
+        public List<BookAuthor> AutoresLibros { get; set; }
     }
 }
