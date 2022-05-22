@@ -2,7 +2,7 @@
 
 namespace WebApiUdemy.Migrations
 {
-    public partial class autoreslibros : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

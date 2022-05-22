@@ -74,15 +74,18 @@ namespace WebApiUdemy.Controllers
             return await context.Autores.FirstOrDefaultAsync();
         }
 
-        [HttpGet("{id:int}/{param?}")]
+        [HttpGet("{id:int}/{param?}", Name = "ObtenerAutorPorId")]
         //[HttpGet("{id:int}/{param=2}")]
-        public async Task<ActionResult<Author>> Get(int id, string nombre)
+        public async Task<ActionResult<AutorResponseDTOConLibros>> Get(int id, string nombre)
         {
-            var autor = await context.Autores.FirstOrDefaultAsync(x => x.Id == id);
+            var autor = await context.Autores
+                .Include(autorDb=>autorDb.AutorLibro)
+                .ThenInclude(autorlibro => autorlibro.Libro)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (autor == null)
                 return NotFound();
             
-            return autor;
+            return mapper.Map<AutorResponseDTOConLibros>(autor);
         }
 
 
@@ -110,25 +113,26 @@ namespace WebApiUdemy.Controllers
 
                 context.Add(autor);
             await context.SaveChangesAsync();
-            return Ok();
+
+            var autorDTO = mapper.Map<AutorResponseDTO>(autor);
+
+            return  CreatedAtRoute("ObtenerAutorPorId", new { id = autor.Id }, autorDTO);
         }
 
         [HttpPut("{id:int}")] //api/autores/2 PARAMETRO DE RUTA
-        public async Task<ActionResult> Put (Author autor, int id)
+        public async Task<ActionResult> Put (AutorCreacionDTO autorCreacionDTO, int id)
         {
-            if(id != autor.Id)
-            {
-                return BadRequest();
-            }
+            
             var existe = await context.Autores.AnyAsync(x => x.Id == id);
             if (!existe)
             {
                 return NotFound();
             }
-
+            var autor = mapper.Map<Author>(autorCreacionDTO);
+            autor.Id = id;
             context.Update(autor);
             await context.SaveChangesAsync();
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id:int}")]

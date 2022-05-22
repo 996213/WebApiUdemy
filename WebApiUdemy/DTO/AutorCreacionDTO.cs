@@ -13,5 +13,7 @@ namespace WebApiUdemy.DTO
         [StringLength(maximumLength: 5, ErrorMessage = "El campo {0} no debe tener {1} caracteres")]
         [PrimeraLetraMayuscula]
         public string Nombre { get; set; }
+
+        
     }
 }

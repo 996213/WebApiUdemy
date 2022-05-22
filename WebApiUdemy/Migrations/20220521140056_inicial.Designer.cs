@@ -9,8 +9,8 @@ using WebApiUdemy;
 namespace WebApiUdemy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220520045359_autoreslibros")]
-    partial class autoreslibros
+    [Migration("20220521140056_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

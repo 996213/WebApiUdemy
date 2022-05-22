@@ -23,14 +23,16 @@ namespace WebApiUdemy.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<LibroResponseDTO>> Get(int id)
+        [HttpGet("{id:int}", Name = "ObtenerLibroPorId")]
+        public async Task<LibroResponseDTOConAutores> Get(int id)
         {
             var libro = await context.Libros
                 .Include(libroDB => libroDB.AutoresLibros)
                 .ThenInclude(z=>z.Autor)
                 .FirstOrDefaultAsync(x => x.Id == id);
-            var data = mapper.Map<LibroResponseDTO>(libro);
+
+            libro.AutoresLibros.OrderBy(x => x.Orden).ToList();
+            var data = mapper.Map<LibroResponseDTOConAutores>(libro);
             return data;
         }
 
@@ -50,29 +52,40 @@ namespace WebApiUdemy.Controllers
             }
             
             var libro = mapper.Map<Book>(libroDTO);
-            if(libroDTO.AutoresId!= null)
+
+
+            var LibroDTO = mapper.Map<LibroResponseDTO>(libro);
+            AsignarOrdenAutores(libro);
+            context.Libros.Add(libro);          
+            await context.SaveChangesAsync();
+            return CreatedAtRoute("ObtenerLibroPorId", new { id = libro.Id }, LibroDTO);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put(LibroCreacionDTO libroCreacionDTO, int id)
+        {
+            var existeLibro = await context.Libros
+                .Include(x=>x.AutoresLibros)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existeLibro == null)
+                return NotFound();
+            //context.Libros.Update(existeLibro);
+            existeLibro = mapper.Map(libroCreacionDTO, existeLibro) ;
+            AsignarOrdenAutores(existeLibro);
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private void AsignarOrdenAutores(Book libro) {
+            if (libro.AutoresLibros != null)
             {
-                for (int i = 0; i < libroDTO.AutoresId.Count; i++)
+                for (int i = 0; i < libro.AutoresLibros.Count; i++)
                 {
                     libro.AutoresLibros[i].Orden = i + 1;
                 }
             }
-
-
-            context.Libros.Add(libro);          
-            await context.SaveChangesAsync();
-            return Ok();
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(Book libro, int id)
-        {
-            var existeLibro = await context.Libros.AnyAsync(x => x.Id == id);
-            //context.Libros.Update(existeLibro);
-            context.Update(libro);
-
-            await context.SaveChangesAsync();
-            return Ok();
         }
     }
 }
