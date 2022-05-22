@@ -52,9 +52,25 @@ namespace WebApiUdemy.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AutorId");
-
                     b.ToTable("Libros");
+                });
+
+            modelBuilder.Entity("WebApiUdemy.Entities.BookAuthor", b =>
+                {
+                    b.Property<int>("AutorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LibroId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Orden")
+                        .HasColumnType("int");
+
+                    b.HasKey("AutorId", "LibroId");
+
+                    b.HasIndex("LibroId");
+
+                    b.ToTable("AutoresLibros");
                 });
 
             modelBuilder.Entity("WebApiUdemy.Entities.Comments", b =>
@@ -77,15 +93,23 @@ namespace WebApiUdemy.Migrations
                     b.ToTable("Comentarios");
                 });
 
-            modelBuilder.Entity("WebApiUdemy.Entities.Book", b =>
+            modelBuilder.Entity("WebApiUdemy.Entities.BookAuthor", b =>
                 {
                     b.HasOne("WebApiUdemy.Entities.Author", "Autor")
-                        .WithMany("Libros")
+                        .WithMany("AutorLibro")
                         .HasForeignKey("AutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WebApiUdemy.Entities.Book", "Libro")
+                        .WithMany("AutoresLibros")
+                        .HasForeignKey("LibroId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Autor");
+
+                    b.Navigation("Libro");
                 });
 
             modelBuilder.Entity("WebApiUdemy.Entities.Comments", b =>
@@ -101,11 +125,13 @@ namespace WebApiUdemy.Migrations
 
             modelBuilder.Entity("WebApiUdemy.Entities.Author", b =>
                 {
-                    b.Navigation("Libros");
+                    b.Navigation("AutorLibro");
                 });
 
             modelBuilder.Entity("WebApiUdemy.Entities.Book", b =>
                 {
+                    b.Navigation("AutoresLibros");
+
                     b.Navigation("Comentarios");
                 });
 #pragma warning restore 612, 618

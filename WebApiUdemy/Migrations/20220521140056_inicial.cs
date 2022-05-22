@@ -2,7 +2,7 @@
 
 namespace WebApiUdemy.Migrations
 {
-    public partial class Comentarios : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,10 +31,29 @@ namespace WebApiUdemy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Libros", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AutoresLibros",
+                columns: table => new
+                {
+                    LibroId = table.Column<int>(type: "int", nullable: false),
+                    AutorId = table.Column<int>(type: "int", nullable: false),
+                    Orden = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AutoresLibros", x => new { x.AutorId, x.LibroId });
                     table.ForeignKey(
-                        name: "FK_Libros_Autores_AutorId",
+                        name: "FK_AutoresLibros_Autores_AutorId",
                         column: x => x.AutorId,
                         principalTable: "Autores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AutoresLibros_Libros_LibroId",
+                        column: x => x.LibroId,
+                        principalTable: "Libros",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -60,26 +79,29 @@ namespace WebApiUdemy.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comentarios_LibroId",
-                table: "Comentarios",
+                name: "IX_AutoresLibros_LibroId",
+                table: "AutoresLibros",
                 column: "LibroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Libros_AutorId",
-                table: "Libros",
-                column: "AutorId");
+                name: "IX_Comentarios_LibroId",
+                table: "Comentarios",
+                column: "LibroId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AutoresLibros");
+
+            migrationBuilder.DropTable(
                 name: "Comentarios");
 
             migrationBuilder.DropTable(
-                name: "Libros");
+                name: "Autores");
 
             migrationBuilder.DropTable(
-                name: "Autores");
+                name: "Libros");
         }
     }
 }

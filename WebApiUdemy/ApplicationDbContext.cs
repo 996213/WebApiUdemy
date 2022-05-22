@@ -13,8 +13,16 @@ namespace WebApiUdemy
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<BookAuthor>()
+                .HasKey(al => new { al.AutorId, al.LibroId });
+        }
+
         public DbSet<Author> Autores { get; set; }
         public DbSet<Book> Libros { get; set; }
         public DbSet<Comments> Comentarios { get; set; }
+        public DbSet<BookAuthor> AutoresLibros { get; set; }
     }
 }
