@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,7 +17,7 @@ namespace WebApiUdemy.Controllers
     {
         private readonly ApplicationDbContext context;
         private readonly IMapper mapper;
-
+        #region  -- Metodos Publicos --
         public BooksController(ApplicationDbContext context, IMapper mapper)
         {
             this.context = context;
@@ -77,6 +78,23 @@ namespace WebApiUdemy.Controllers
 
             return NoContent();
         }
+
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult> Patch(int id, JsonPatchDocument<BookPatchDTO> patchDocument)
+        {
+            if (patchDocument == null)
+                return BadRequest();
+
+            var libroDB = await context.Libros.FirstOrDefaultAsync(x => x.Id == id);
+            if (libroDB == null)
+                return NotFound();
+
+            var libroDTO = mapper.Map<BookPatchDTO>(libroDB);
+            patchDocument.ApplyTo(libroDTO, ModelState);
+
+            var 
+        }
+        #endregion
 
         private void AsignarOrdenAutores(Book libro) {
             if (libro.AutoresLibros != null)
