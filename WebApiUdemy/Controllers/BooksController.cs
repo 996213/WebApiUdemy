@@ -25,12 +25,15 @@ namespace WebApiUdemy.Controllers
         }
 
         [HttpGet("{id:int}", Name = "ObtenerLibroPorId")]
-        public async Task<LibroResponseDTOConAutores> Get(int id)
+        public async Task<ActionResult<LibroResponseDTOConAutores>> Get(int id)
         {
             var libro = await context.Libros
                 .Include(libroDB => libroDB.AutoresLibros)
                 .ThenInclude(z=>z.Autor)
                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (libro == null)
+                return NotFound();
 
             libro.AutoresLibros.OrderBy(x => x.Orden).ToList();
             var data = mapper.Map<LibroResponseDTOConAutores>(libro);
@@ -92,7 +95,28 @@ namespace WebApiUdemy.Controllers
             var libroDTO = mapper.Map<BookPatchDTO>(libroDB);
             patchDocument.ApplyTo(libroDTO, ModelState);
 
-            var 
+            var esValido = TryValidateModel(libroDTO);
+            if (!esValido)
+                return BadRequest(ModelState);
+
+            mapper.Map(libroDTO, libroDB);
+
+
+            await context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var existe = await context.Libros.AnyAsync(x => x.Id == id);
+            if (!existe)
+            {
+                return NotFound();
+            }
+            context.Remove(new Author { Id = id });
+            await context.SaveChangesAsync();
+            return Ok();
         }
         #endregion
 
@@ -105,5 +129,6 @@ namespace WebApiUdemy.Controllers
                 }
             }
         }
+
     }
 }

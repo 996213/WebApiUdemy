@@ -30,6 +30,7 @@ namespace WebApiUdemy.Utilities
 
             CreateMap<CommentRequestDTO, Comments>();
             CreateMap<Comments, CommentResponseDTO>();
+            CreateMap<BookPatchDTO, Book>().ReverseMap();
 
 
         }

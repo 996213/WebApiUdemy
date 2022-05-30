@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -26,9 +28,10 @@ namespace WebApiUdemy.Controllers
         private readonly ServicioSingleton servicioSingleton;
         private readonly ILogger logger;
         private readonly IMapper mapper;
+        private readonly IConfiguration _configuration;
 
         public AuthorsController(ApplicationDbContext context, IServicio servicio, ServicioTransient servicioTransient, ServicioScoped servicioScoped, 
-            ServicioSingleton servicioSingleton, ILogger<AuthorsController> logger, IMapper mapper)
+            ServicioSingleton servicioSingleton, ILogger<AuthorsController> logger, IMapper mapper, IConfiguration configuration)
         {
             this.context = context;
             this.servicio = servicio;
@@ -37,6 +40,15 @@ namespace WebApiUdemy.Controllers
             this.servicioSingleton = servicioSingleton;
             this.logger = logger;
             this.mapper = mapper;
+            _configuration = configuration;
+        }
+
+        [HttpGet("configuraciones")]
+        public ActionResult<string> ObtenerConfiguracion()
+        {
+            return _configuration["apellido"];
+            return _configuration["ConnectionStrings:defaultConnection"];
+            
         }
 
         [HttpGet("GUID")]
@@ -58,6 +70,7 @@ namespace WebApiUdemy.Controllers
         [HttpGet]
         [HttpGet("listado")]
         [HttpGet("/listado")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ServiceFilter(typeof(MiFiltroDeAccion))]
         public async Task<List<AutorResponseDTO>> Get()
         {
