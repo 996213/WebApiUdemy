@@ -14,24 +14,26 @@ using WebApiUdemy.DTO;
 namespace WebApiUdemy.Controllers
 {
     [ApiController]
-    [Route("api/usuarios")]
+    [Route("api/cuentas")]
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
+        private readonly SignInManager<IdentityUser> signInManager;
 
-        public AccountsController(UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public AccountsController(UserManager<IdentityUser> userManager, IConfiguration configuration, SignInManager<IdentityUser> signInManager)
         {
             this.userManager = userManager;
             this.configuration = configuration;
+            this.signInManager = signInManager;
         }
 
 
         [HttpPost("registrar")]
         public async Task<ActionResult<UserResponseDTO>> Registrar(UserRequestDTO userRequest)
         {
-            var usuario = new IdentityUser { UserName = userRequest.Email, Email = userRequest.Email };
-            var resultado = await userManager.CreateAsync(usuario, userRequest.Password);
+                var usuario = new IdentityUser { UserName = userRequest.Email, Email = userRequest.Email };
+                var resultado = await userManager.CreateAsync(usuario, userRequest.Password);
 
             if (resultado.Succeeded)
             {
@@ -44,6 +46,21 @@ namespace WebApiUdemy.Controllers
 
 
 
+        }
+        [HttpPost("login")]
+
+        public async Task<ActionResult<UserResponseDTO>> Login(UserRequestDTO userRequest)
+        {
+            var resultado = await signInManager.PasswordSignInAsync(userRequest.Email, userRequest.Password,
+                isPersistent: false, lockoutOnFailure: false);
+            if (resultado.Succeeded)
+            {
+                return GenerarToken(userRequest);
+            }
+            else
+            {
+                return BadRequest("Login Incorrecto");
+            }
         }
 
         private UserResponseDTO GenerarToken(UserRequestDTO userRequest)

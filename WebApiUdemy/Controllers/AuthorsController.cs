@@ -18,7 +18,7 @@ namespace WebApiUdemy.Controllers
 {
     [ApiController]
     [Route("api/authors")]
-    //[Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AuthorsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -70,7 +70,7 @@ namespace WebApiUdemy.Controllers
         [HttpGet]
         [HttpGet("listado")]
         [HttpGet("/listado")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         [ServiceFilter(typeof(MiFiltroDeAccion))]
         public async Task<List<AutorResponseDTO>> Get()
         {
