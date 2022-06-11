@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,7 @@ namespace WebApiUdemy
             //    new ServicioA(new Logger())
             //    );
             //autoresController.Get();
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             Configuration = configuration;
         }
 
@@ -108,6 +110,19 @@ namespace WebApiUdemy
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddAuthorization(opciones =>
+            {
+                opciones.AddPolicy("EsAdmin", politica => politica.RequireClaim("esAdmin"));
+            });
+
+            services.AddCors(opciones =>
+            {
+                opciones.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("https://www.apirequest.io").AllowAnyMethod().AllowAnyHeader();
+                    //.WithExposedHeaders
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -144,6 +159,8 @@ namespace WebApiUdemy
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors();
         }
     }
 }

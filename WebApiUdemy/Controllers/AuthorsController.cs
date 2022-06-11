@@ -18,7 +18,7 @@ namespace WebApiUdemy.Controllers
 {
     [ApiController]
     [Route("api/authors")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
     public class AuthorsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
