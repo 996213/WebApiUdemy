@@ -56,3 +56,14 @@ C:\repos\WebApiUdemy\WebAiMoviesUdemy\obj\Debug\net6.0\WebApiMoviesUdemy.genrunt
 C:\repos\WebApiUdemy\WebAiMoviesUdemy\obj\Debug\net6.0\ref\WebApiMoviesUdemy.dll
 C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\AutoMapper.dll
 C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\Azure.Core.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\Azure.Storage.Blobs.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\Azure.Storage.Common.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\System.IO.Hashing.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\System.Memory.Data.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\WebApiMoviesUdemy.staticwebassets.runtime.json
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\repos\WebApiUdemy\WebAiMoviesUdemy\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll

@@ -1,11 +1,54 @@
 {
   "Version": 1,
-  "Hash": "n15hdmkb0KnRVl09zWCW2OAg6LoXbCzYY0015F8GerY=",
+  "Hash": "kvQn2cNyffP66FkrWhw6CNZisaD5Nuh5W2KTWFXnmIU=",
   "Source": "WebApiMoviesUdemy",
   "BasePath": "_content/WebApiMoviesUdemy",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "WebApiMoviesUdemy\\wwwroot",
+      "Source": "WebApiMoviesUdemy",
+      "ContentRoot": "C:\\repos\\WebApiUdemy\\WebAiMoviesUdemy\\wwwroot\\",
+      "BasePath": "_content/WebApiMoviesUdemy",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\repos\\WebApiUdemy\\WebAiMoviesUdemy\\wwwroot\\0e263f0c-6b10-462e-b49c-6eb008d74aae.jpg\\0e263f0c-6b10-462e-b49c-6eb008d74aae.jpg",
+      "SourceId": "WebApiMoviesUdemy",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\repos\\WebApiUdemy\\WebAiMoviesUdemy\\wwwroot\\",
+      "BasePath": "_content/WebApiMoviesUdemy",
+      "RelativePath": "0e263f0c-6b10-462e-b49c-6eb008d74aae.jpg/0e263f0c-6b10-462e-b49c-6eb008d74aae.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\0e263f0c-6b10-462e-b49c-6eb008d74aae.jpg\\0e263f0c-6b10-462e-b49c-6eb008d74aae.jpg"
+    },
+    {
+      "Identity": "C:\\repos\\WebApiUdemy\\WebAiMoviesUdemy\\wwwroot\\16d1308a-e629-4a8b-8b3c-8f2c3652d6fe.jpg\\16d1308a-e629-4a8b-8b3c-8f2c3652d6fe.jpg",
+      "SourceId": "WebApiMoviesUdemy",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\repos\\WebApiUdemy\\WebAiMoviesUdemy\\wwwroot\\",
+      "BasePath": "_content/WebApiMoviesUdemy",
+      "RelativePath": "16d1308a-e629-4a8b-8b3c-8f2c3652d6fe.jpg/16d1308a-e629-4a8b-8b3c-8f2c3652d6fe.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\16d1308a-e629-4a8b-8b3c-8f2c3652d6fe.jpg\\16d1308a-e629-4a8b-8b3c-8f2c3652d6fe.jpg"
+    }
+  ]
 }
